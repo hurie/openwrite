@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router"
 import { BookOpen, Brain, Settings, Users } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import DashboardHeader from "@/components/dashboard-header"
 import { Logo } from "@/components/ui/logo"
 import {
@@ -43,6 +44,8 @@ export const Route = createFileRoute("/dashboard")({
 })
 
 function DashboardLayout() {
+  const { t } = useTranslation()
+
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full">
@@ -56,14 +59,14 @@ function DashboardLayout() {
 
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel>Writing</SidebarGroupLabel>
+              <SidebarGroupLabel>{t("writing", { ns: "navigation" })}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link to="/dashboard/projects">
                         <BookOpen />
-                        <span>My Projects</span>
+                        <span>{t("myProjects", { ns: "navigation" })}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -72,14 +75,14 @@ function DashboardLayout() {
             </SidebarGroup>
 
             <SidebarGroup>
-              <SidebarGroupLabel>Organization</SidebarGroupLabel>
+              <SidebarGroupLabel>{t("organization", { ns: "navigation" })}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link to="/dashboard/team">
                         <Users />
-                        <span>Team</span>
+                        <span>{t("team", { ns: "navigation" })}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -87,7 +90,7 @@ function DashboardLayout() {
                     <SidebarMenuButton asChild>
                       <Link to="/dashboard/settings">
                         <Settings />
-                        <span>Settings</span>
+                        <span>{t("settings", { ns: "navigation" })}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -96,14 +99,14 @@ function DashboardLayout() {
             </SidebarGroup>
 
             <SidebarGroup>
-              <SidebarGroupLabel>AI & Tools</SidebarGroupLabel>
+              <SidebarGroupLabel>{t("aiTools", { ns: "navigation" })}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link to="/dashboard/ai">
                         <Brain />
-                        <span>AI Models</span>
+                        <span>{t("aiModels", { ns: "navigation" })}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

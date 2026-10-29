@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { ChevronDown, ChevronRight, Edit, FileText, Plus, Trash2, Users } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { CharacterDialog } from "@/components/character-dialog"
 import { DeleteCharacterDialog } from "@/components/delete-character-dialog"
 import { Badge } from "@/components/ui/badge"
@@ -29,6 +30,7 @@ export function CharacterSidebarSection({
   onToggle,
   onOpenCodexModal,
 }: CharacterSidebarSectionProps) {
+  const { t } = useTranslation()
   const [characterDialogOpen, setCharacterDialogOpen] = useState(false)
   const [characterDialogMode, setCharacterDialogMode] = useState<"create" | "edit">("create")
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null)
@@ -72,7 +74,7 @@ export function CharacterSidebarSection({
                 <ChevronRight className="h-4 w-4" />
               )}
               <Users className="h-4 w-4" />
-              <span>Characters</span>
+              <span>{t("characters", { ns: "navigation" })}</span>
               <Badge className="ml-auto" variant="secondary">
                 {characters.length}
               </Badge>
@@ -87,7 +89,7 @@ export function CharacterSidebarSection({
                 variant="ghost"
               >
                 <Plus className="h-4 w-4" />
-                <span>New</span>
+                <span>{t("actions.new", { ns: "common" })}</span>
               </Button>
               {characters.map((character) => (
                 <ContextMenu key={character.id}>
@@ -105,11 +107,11 @@ export function CharacterSidebarSection({
                   <ContextMenuContent>
                     <ContextMenuItem onClick={() => onOpenCodexModal("characters", character.name)}>
                       <FileText className="mr-2 h-4 w-4" />
-                      View Details
+                      {t("labels.viewDetails", { defaultValue: "View Details", ns: "common" })}
                     </ContextMenuItem>
                     <ContextMenuItem onClick={() => handleEditCharacter(character)}>
                       <Edit className="mr-2 h-4 w-4" />
-                      Edit Character
+                      {t("editCharacter", { ns: "canvas" })}
                     </ContextMenuItem>
                     <ContextMenuSeparator />
                     <ContextMenuItem
@@ -117,7 +119,7 @@ export function CharacterSidebarSection({
                       onClick={() => handleDeleteCharacter(character)}
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
-                      Delete Character
+                      {t("deleteCharacter", { ns: "canvas" })}
                     </ContextMenuItem>
                   </ContextMenuContent>
                 </ContextMenu>

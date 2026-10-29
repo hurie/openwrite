@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { BookOpen, Clock, Plus, TrendingUp, Users } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { EditProjectDialog } from "@/components/edit-project-dialog"
 import { ProjectCard } from "@/components/project-card"
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/dashboard/")({
 })
 
 function DashboardHome() {
+  const { t } = useTranslation()
   const [editingProject, setEditingProject] = useState<Project | null>(null)
 
   // Fetch projects for overview
@@ -35,9 +37,14 @@ function DashboardHome() {
   // Handle error with toast notification
   useEffect(() => {
     if (isError && error) {
-      toast.error("Failed to load projects. Please try refreshing the page.")
+      toast.error(
+        t("dashboard.loadErrorToast", {
+          defaultValue: "Failed to load projects. Please try refreshing the page.",
+          ns: "projects",
+        })
+      )
     }
-  }, [isError, error])
+  }, [isError, error, t])
 
   const totalWords = projects?.reduce((sum, project) => sum + project.currentWordCount, 0) || 0
   const activeProjects =
@@ -53,12 +60,24 @@ function DashboardHome() {
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
               <h2 className="mb-2 font-semibold text-2xl text-destructive">
-                Unable to load dashboard
+                {t("dashboard.loadErrorTitle", {
+                  defaultValue: "Unable to load dashboard",
+                  ns: "projects",
+                })}
               </h2>
               <p className="mb-4 text-muted-foreground">
-                There was a problem loading your writing data. Please try refreshing the page.
+                {t("dashboard.loadErrorDesc", {
+                  defaultValue:
+                    "There was a problem loading your writing data. Please try refreshing the page.",
+                  ns: "projects",
+                })}
               </p>
-              <Button onClick={() => window.location.reload()}>Refresh Page</Button>
+              <Button onClick={() => window.location.reload()}>
+                {t("dashboard.refreshPage", {
+                  defaultValue: "Refresh Page",
+                  ns: "projects",
+                })}
+              </Button>
             </div>
           </div>
         </div>
@@ -70,55 +89,102 @@ function DashboardHome() {
     <div className="p-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
-          <h1 className="font-bold text-3xl">Welcome back!</h1>
-          <p className="mt-2 text-muted-foreground">Here's what's happening with your writing.</p>
+          <h1 className="font-bold text-3xl">
+            {t("dashboard.welcomeBack", { defaultValue: "Welcome back!", ns: "projects" })}
+          </h1>
+          <p className="mt-2 text-muted-foreground">
+            {t("dashboard.welcomeDesc", {
+              defaultValue: "Here's what's happening with your writing.",
+              ns: "projects",
+            })}
+          </p>
         </div>
 
         {/* Stats Cards */}
         <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium text-sm">Total Projects</CardTitle>
+              <CardTitle className="font-medium text-sm">
+                {t("dashboard.totalProjects", {
+                  defaultValue: "Total Projects",
+                  ns: "projects",
+                })}
+              </CardTitle>
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="font-bold text-2xl">{projects?.length || 0}</div>
               <p className="text-muted-foreground text-xs">
-                {activeProjects.length} active projects
+                {t("dashboard.activeProjects", {
+                  count: activeProjects.length,
+                  defaultValue: `${activeProjects.length} active projects`,
+                  ns: "projects",
+                })}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium text-sm">Total Words</CardTitle>
+              <CardTitle className="font-medium text-sm">
+                {t("dashboard.totalWords", {
+                  defaultValue: "Total Words",
+                  ns: "projects",
+                })}
+              </CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="font-bold text-2xl">{totalWords.toLocaleString()}</div>
-              <p className="text-muted-foreground text-xs">Across all projects</p>
+              <p className="text-muted-foreground text-xs">
+                {t("dashboard.acrossAllProjects", {
+                  defaultValue: "Across all projects",
+                  ns: "projects",
+                })}
+              </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium text-sm">This Week</CardTitle>
+              <CardTitle className="font-medium text-sm">
+                {t("dashboard.thisWeek", {
+                  defaultValue: "This Week",
+                  ns: "projects",
+                })}
+              </CardTitle>
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="font-bold text-2xl">0</div>
-              <p className="text-muted-foreground text-xs">Words written</p>
+              <p className="text-muted-foreground text-xs">
+                {t("dashboard.wordsWritten", {
+                  defaultValue: "Words written",
+                  ns: "projects",
+                })}
+              </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium text-sm">Organization</CardTitle>
+              <CardTitle className="font-medium text-sm">
+                {t("dashboard.organization", {
+                  defaultValue: "Organization",
+                  ns: "projects",
+                })}
+              </CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="font-bold text-2xl">1</div>
-              <p className="text-muted-foreground text-xs">Team member</p>
+              <p className="text-muted-foreground text-xs">
+                {t("dashboard.teamMember", {
+                  count: 1,
+                  defaultValue: "Team member",
+                  ns: "projects",
+                })}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -128,11 +194,23 @@ function DashboardHome() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Recent Projects</CardTitle>
-                <CardDescription>Your latest writing projects</CardDescription>
+                <CardTitle>
+                  {t("dashboard.recentProjects", {
+                    defaultValue: "Recent Projects",
+                    ns: "projects",
+                  })}
+                </CardTitle>
+                <CardDescription>
+                  {t("dashboard.recentProjectsDesc", {
+                    defaultValue: "Your latest writing projects",
+                    ns: "projects",
+                  })}
+                </CardDescription>
               </div>
               <Button asChild size="sm" variant="outline">
-                <Link to="/dashboard/projects">View All</Link>
+                <Link to="/dashboard/projects">
+                  {t("actions.viewAll", { defaultValue: "View All", ns: "common" })}
+                </Link>
               </Button>
             </CardHeader>
             <CardContent>
@@ -145,11 +223,16 @@ function DashboardHome() {
               ) : (
                 <div className="py-8 text-center">
                   <BookOpen className="mx-auto mb-4 h-12 w-12 opacity-50" />
-                  <p className="mb-4 text-muted-foreground">No projects yet</p>
+                  <p className="mb-4 text-muted-foreground">
+                    {t("noProjects", { defaultValue: "No projects yet", ns: "projects" })}
+                  </p>
                   <Button asChild>
                     <Link to="/dashboard/projects">
                       <Plus className="mr-2 h-4 w-4" />
-                      Create Your First Project
+                      {t("createFirstProject", {
+                        defaultValue: "Create Your First Project",
+                        ns: "projects",
+                      })}
                     </Link>
                   </Button>
                 </div>
@@ -160,8 +243,18 @@ function DashboardHome() {
           {/* Writing Progress */}
           <Card>
             <CardHeader>
-              <CardTitle>Writing Progress</CardTitle>
-              <CardDescription>Goal completion across projects</CardDescription>
+              <CardTitle>
+                {t("dashboard.writingProgress", {
+                  defaultValue: "Writing Progress",
+                  ns: "projects",
+                })}
+              </CardTitle>
+              <CardDescription>
+                {t("dashboard.goalCompletion", {
+                  defaultValue: "Goal completion across projects",
+                  ns: "projects",
+                })}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -179,7 +272,8 @@ function DashboardHome() {
                       <Progress className="h-2" value={progress} />
                       <p className="text-muted-foreground text-xs">
                         {project.currentWordCount.toLocaleString()} /{" "}
-                        {project.targetWordCount?.toLocaleString() || "∞"} words
+                        {project.targetWordCount?.toLocaleString() || "∞"}{" "}
+                        {t("words", { defaultValue: "words", ns: "editor" })}
                       </p>
                     </div>
                   )
@@ -187,7 +281,12 @@ function DashboardHome() {
 
                 {activeProjects.length === 0 && (
                   <div className="py-8 text-center text-muted-foreground">
-                    <p>No active projects with word goals</p>
+                    <p>
+                      {t("dashboard.noActiveGoals", {
+                        defaultValue: "No active projects with word goals",
+                        ns: "projects",
+                      })}
+                    </p>
                   </div>
                 )}
               </div>

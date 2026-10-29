@@ -1,0 +1,43 @@
+{
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "add": "Add",
+    "remove": "Remove",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "confirm": "Confirm",
+    "retry": "Retry",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "new": "New",
+    "skip": "Skip",
+    "done": "Done",
+    "rename": "Rename",
+    "viewAll": "View All"
+  },
+  "status": {
+    "saved": "Saved",
+    "saving": "Saving...",
+    "unsaved": "Unsaved changes",
+    "error": "Error",
+    "success": "Success",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "labels": {
+    "yes": "Yes",
+    "no": "No",
+    "name": "Name",
+    "title": "Title",
+    "description": "Description",
+    "type": "Type",
+    "of": "of",
+    "viewDetails": "View Details"
+  }
+}

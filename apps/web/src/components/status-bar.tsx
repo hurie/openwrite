@@ -1,5 +1,6 @@
 import { HelpCircle } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { AutocompleteToggle } from "@/components/autocomplete-toggle"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -11,6 +12,7 @@ interface StatusBarProps {
 }
 
 export function StatusBar({ wordCount, lastSavedText, onShowGuide }: StatusBarProps) {
+  const { t } = useTranslation()
   const [currentTime, setCurrentTime] = useState(() =>
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
   )
@@ -28,7 +30,9 @@ export function StatusBar({ wordCount, lastSavedText, onShowGuide }: StatusBarPr
     <footer className="border-t px-6 py-2">
       <div className="flex items-center justify-between text-muted-foreground text-sm">
         <div className="flex items-center gap-4">
-          <span>Words: {wordCount.toLocaleString()}</span>
+          <span>
+            {t("wordsLabel", { defaultValue: "Words", ns: "editor" })}: {wordCount.toLocaleString()}
+          </span>
           <Separator className="h-4" orientation="vertical" />
           <span>{lastSavedText}</span>
         </div>
@@ -41,7 +45,7 @@ export function StatusBar({ wordCount, lastSavedText, onShowGuide }: StatusBarPr
               className="h-6 w-6 p-0"
               onClick={onShowGuide}
               size="sm"
-              title="Show guide"
+              title={t("showGuide", { ns: "editor" })}
               type="button"
               variant="ghost"
             >

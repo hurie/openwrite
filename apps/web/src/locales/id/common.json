@@ -1,0 +1,43 @@
+{
+  "actions": {
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Ubah",
+    "create": "Buat",
+    "add": "Tambah",
+    "remove": "Hapus",
+    "close": "Tutup",
+    "back": "Kembali",
+    "next": "Lanjut",
+    "confirm": "Konfirmasi",
+    "retry": "Coba Lagi",
+    "search": "Cari",
+    "filter": "Saring",
+    "loading": "Memuat...",
+    "new": "Baru",
+    "skip": "Lewati",
+    "done": "Selesai",
+    "rename": "Ubah Nama",
+    "viewAll": "Lihat Semua"
+  },
+  "status": {
+    "saved": "Tersimpan",
+    "saving": "Menyimpan...",
+    "unsaved": "Perubahan belum disimpan",
+    "error": "Galat",
+    "success": "Berhasil",
+    "required": "Wajib",
+    "optional": "Opsional"
+  },
+  "labels": {
+    "yes": "Ya",
+    "no": "Tidak",
+    "name": "Nama",
+    "title": "Judul",
+    "description": "Deskripsi",
+    "type": "Tipe",
+    "of": "dari",
+    "viewDetails": "Lihat Detail"
+  }
+}

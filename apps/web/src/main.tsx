@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createRouter, RouterProvider } from "@tanstack/react-router"
 import ReactDOM from "react-dom/client"
 import Loader from "./components/loader"
+import "./lib/i18n"
 import { initializeTheme } from "./lib/theme"
 import { routeTree } from "./routeTree.gen"
 

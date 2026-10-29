@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { Bot, Send, Settings, User } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -26,15 +27,16 @@ interface AIChatContentProps {
 const MAX_HISTORY_MESSAGES = 12
 
 const PROMPT_SUGGESTIONS = [
-  "Help me develop this character",
-  "Suggest plot twists for this scene",
-  "Improve the pacing here",
-  "Make this dialogue more realistic",
-  "Add more sensory details",
-  "What's missing from this scene?",
-]
+  { key: "promptCharacter", text: "Help me develop this character" },
+  { key: "promptPlot", text: "Suggest plot twists for this scene" },
+  { key: "promptPacing", text: "Improve the pacing here" },
+  { key: "promptDialogue", text: "Make this dialogue more realistic" },
+  { key: "promptSensory", text: "Add more sensory details" },
+  { key: "promptMissing", text: "What's missing from this scene?" },
+] as const
 
 export function AIChatContent({ onInsertText, projectId }: AIChatContentProps) {
+  const { t } = useTranslation()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [needsProvider, setNeedsProvider] = useState(false)
@@ -140,24 +142,33 @@ export function AIChatContent({ onInsertText, projectId }: AIChatContentProps) {
                 <Bot className="h-6 w-6 text-muted-foreground" />
               </div>
               <p className="mb-4 text-muted-foreground text-sm">
-                Hi! I'm here to help with your writing. Ask me anything about characters, plot,
-                style, or storytelling.
+                {t("ai.greeting", {
+                  defaultValue:
+                    "Hi! I'm here to help with your writing. Ask me anything about characters, plot, style, or storytelling.",
+                  ns: "editor",
+                })}
               </p>
               <div className="space-y-2">
                 <p className="font-medium text-muted-foreground text-xs uppercase tracking-wide">
-                  Try asking:
+                  {t("ai.tryAsking", { defaultValue: "Try asking:", ns: "editor" })}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {PROMPT_SUGGESTIONS.map((suggestion) => (
-                    <Badge
-                      className="cursor-pointer py-1 text-xs hover:bg-secondary/80"
-                      key={suggestion}
-                      onClick={() => handleSuggestionClick(suggestion)}
-                      variant="secondary"
-                    >
-                      {suggestion}
-                    </Badge>
-                  ))}
+                  {PROMPT_SUGGESTIONS.map((suggestion) => {
+                    const label = t(`ai.${suggestion.key}`, {
+                      defaultValue: suggestion.text,
+                      ns: "editor",
+                    })
+                    return (
+                      <Badge
+                        className="cursor-pointer py-1 text-xs hover:bg-secondary/80"
+                        key={suggestion.key}
+                        onClick={() => handleSuggestionClick(label)}
+                        variant="secondary"
+                      >
+                        {label}
+                      </Badge>
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -194,7 +205,10 @@ export function AIChatContent({ onInsertText, projectId }: AIChatContentProps) {
                       size="sm"
                       variant="ghost"
                     >
-                      Insert into editor
+                      {t("ai.insertIntoEditor", {
+                        defaultValue: "Insert into editor",
+                        ns: "editor",
+                      })}
                     </Button>
                   </div>
                 )}
@@ -247,7 +261,10 @@ export function AIChatContent({ onInsertText, projectId }: AIChatContentProps) {
             className="flex-1"
             disabled={isTyping}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about your writing..."
+            placeholder={t("ai.inputPlaceholder", {
+              defaultValue: "Ask about your writing...",
+              ns: "editor",
+            })}
             ref={inputRef}
             value={input}
           />
