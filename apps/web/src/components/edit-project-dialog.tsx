@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
@@ -38,6 +39,7 @@ interface EditProjectDialogProps {
 }
 
 export function EditProjectDialog({ project, open, onOpenChange }: EditProjectDialogProps) {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [editForm, setEditForm] = useState<EditProjectForm>({
     title: project.title,
@@ -67,12 +69,18 @@ export function EditProjectDialog({ project, open, onOpenChange }: EditProjectDi
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] })
       onOpenChange(false)
-      toast.success("Project updated successfully! ✨", {
-        description: "Your changes have been saved.",
-      })
+      toast.success(
+        t("updateSuccess", { defaultValue: "Project updated successfully! ✨", ns: "projects" }),
+        {
+          description: t("updateSuccessDesc", {
+            defaultValue: "Your changes have been saved.",
+            ns: "projects",
+          }),
+        }
+      )
     },
     onError: (error) => {
-      toast.error("Failed to update project", {
+      toast.error(t("updateError", { defaultValue: "Failed to update project", ns: "projects" }), {
         description: error instanceof Error ? error.message : "Please try again.",
       })
     },
@@ -80,7 +88,7 @@ export function EditProjectDialog({ project, open, onOpenChange }: EditProjectDi
 
   const handleUpdateProject = () => {
     if (!editForm.title.trim()) {
-      toast.error("Title is required")
+      toast.error(t("titleRequired", { defaultValue: "Title is required", ns: "projects" }))
       return
     }
     updateProjectMutation.mutate(editForm)
@@ -103,36 +111,53 @@ export function EditProjectDialog({ project, open, onOpenChange }: EditProjectDi
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Project</DialogTitle>
+          <DialogTitle>
+            {t("editProject", { defaultValue: "Edit Project", ns: "projects" })}
+          </DialogTitle>
           <DialogDescription>
-            Update your project details. Changes will be saved immediately.
+            {t("editProjectDesc", {
+              defaultValue: "Update your project details. Changes will be saved immediately.",
+              ns: "projects",
+            })}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="edit-title">Title *</Label>
+            <Label htmlFor="edit-title">
+              {t("title", { defaultValue: "Title", ns: "projects" })} *
+            </Label>
             <Input
               id="edit-title"
               onChange={(e) => setEditForm((prev) => ({ ...prev, title: e.target.value }))}
-              placeholder="The Great Adventure"
+              placeholder={t("titlePlaceholder", {
+                defaultValue: "The Great Adventure",
+                ns: "projects",
+              })}
               value={editForm.title}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-description">Description</Label>
+            <Label htmlFor="edit-description">
+              {t("description", { defaultValue: "Description", ns: "projects" })}
+            </Label>
             <Textarea
               id="edit-description"
               onChange={(e) => setEditForm((prev) => ({ ...prev, description: e.target.value }))}
-              placeholder="A brief description of your project..."
+              placeholder={t("descriptionPlaceholder", {
+                defaultValue: "A brief description of your project...",
+                ns: "projects",
+              })}
               value={editForm.description}
             />
           </div>
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="edit-type">Project Type</Label>
+              <Label htmlFor="edit-type">
+                {t("projectType", { defaultValue: "Project Type", ns: "projects" })}
+              </Label>
               <Select
                 onValueChange={(
                   value:
@@ -149,29 +174,51 @@ export function EditProjectDialog({ project, open, onOpenChange }: EditProjectDi
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="novel">Novel</SelectItem>
-                  <SelectItem value="trilogy">Trilogy</SelectItem>
-                  <SelectItem value="series">Series</SelectItem>
-                  <SelectItem value="short_story_collection">Short Story Collection</SelectItem>
-                  <SelectItem value="graphic_novel">Graphic Novel</SelectItem>
-                  <SelectItem value="screenplay">Screenplay</SelectItem>
+                  <SelectItem value="novel">
+                    {t("types.novel", { defaultValue: "Novel", ns: "projects" })}
+                  </SelectItem>
+                  <SelectItem value="trilogy">
+                    {t("types.trilogy", { defaultValue: "Trilogy", ns: "projects" })}
+                  </SelectItem>
+                  <SelectItem value="series">
+                    {t("types.series", { defaultValue: "Series", ns: "projects" })}
+                  </SelectItem>
+                  <SelectItem value="short_story_collection">
+                    {t("types.short_story_collection", {
+                      defaultValue: "Short Story Collection",
+                      ns: "projects",
+                    })}
+                  </SelectItem>
+                  <SelectItem value="graphic_novel">
+                    {t("types.graphic_novel", { defaultValue: "Graphic Novel", ns: "projects" })}
+                  </SelectItem>
+                  <SelectItem value="screenplay">
+                    {t("types.screenplay", { defaultValue: "Screenplay", ns: "projects" })}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="edit-genre">Genre</Label>
+                <Label htmlFor="edit-genre">
+                  {t("genre", { defaultValue: "Genre", ns: "projects" })}
+                </Label>
                 <Input
                   id="edit-genre"
                   onChange={(e) => setEditForm((prev) => ({ ...prev, genre: e.target.value }))}
-                  placeholder="e.g., Fantasy, Sci-Fi"
+                  placeholder={t("genrePlaceholder", {
+                    defaultValue: "e.g., Fantasy, Sci-Fi",
+                    ns: "projects",
+                  })}
                   value={editForm.genre}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="edit-targetWordCount">Target Words</Label>
+                <Label htmlFor="edit-targetWordCount">
+                  {t("targetWordCount", { defaultValue: "Target Words", ns: "projects" })}
+                </Label>
                 <Input
                   id="edit-targetWordCount"
                   onChange={(e) =>
@@ -185,7 +232,9 @@ export function EditProjectDialog({ project, open, onOpenChange }: EditProjectDi
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-visibility">Visibility</Label>
+              <Label htmlFor="edit-visibility">
+                {t("visibility", { defaultValue: "Visibility", ns: "projects" })}
+              </Label>
               <Select
                 onValueChange={(value: "private" | "organization" | "public") =>
                   setEditForm((prev) => ({ ...prev, visibility: value }))
@@ -196,9 +245,18 @@ export function EditProjectDialog({ project, open, onOpenChange }: EditProjectDi
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="private">Private</SelectItem>
-                  <SelectItem value="organization">Organization</SelectItem>
-                  <SelectItem value="public">Public</SelectItem>
+                  <SelectItem value="private">
+                    {t("visibilities.private", { defaultValue: "Private", ns: "projects" })}
+                  </SelectItem>
+                  <SelectItem value="organization">
+                    {t("visibilities.organization", {
+                      defaultValue: "Organization",
+                      ns: "projects",
+                    })}
+                  </SelectItem>
+                  <SelectItem value="public">
+                    {t("visibilities.public", { defaultValue: "Public", ns: "projects" })}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -207,10 +265,12 @@ export function EditProjectDialog({ project, open, onOpenChange }: EditProjectDi
 
         <DialogFooter>
           <Button onClick={handleCancel} variant="outline">
-            Cancel
+            {t("actions.cancel", { defaultValue: "Cancel", ns: "common" })}
           </Button>
           <Button disabled={updateProjectMutation.isPending} onClick={handleUpdateProject}>
-            {updateProjectMutation.isPending ? "Updating..." : "Update Project"}
+            {updateProjectMutation.isPending
+              ? t("updating", { defaultValue: "Updating...", ns: "projects" })
+              : t("updateProject", { defaultValue: "Update Project", ns: "projects" })}
           </Button>
         </DialogFooter>
       </DialogContent>
