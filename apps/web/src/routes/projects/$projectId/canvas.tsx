@@ -18,6 +18,7 @@ import {
   useReactFlow,
 } from "@xyflow/react"
 import React, { useCallback, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import "@xyflow/react/dist/style.css"
 
 import {
@@ -91,26 +92,6 @@ type StoryElementType = "premise" | "act" | "chapter" | "scene" | "beat" | "plot
 
 // Subtypes the expand endpoint can decompose one level down
 const EXPANDABLE_SUBTYPES = new Set(["premise", "act", "chapter", "scene"])
-
-// Steps whose targets are absent (e.g. no expand buttons on an empty canvas)
-// are skipped automatically by GuidedTour
-const CANVAS_TOUR_STEPS: TourStep[] = [
-  {
-    target: '[data-tour="premise-card"]',
-    title: "Start with a premise",
-    body: "One sentence is enough — it becomes the root node of your story map, ready to expand.",
-  },
-  {
-    target: '[title="Expand with AI"]',
-    title: "Expand any element",
-    body: "The sparkle button breaks an element into the next level — premise into acts, acts into chapters, chapters into scenes. Add optional guidance to steer it.",
-  },
-  {
-    target: '[data-tour="canvas-elements"]',
-    title: "Add elements by hand",
-    body: "Acts, scenes, beats, characters, locations, and lore — drop them anywhere and connect them by dragging between node handles.",
-  },
-]
 
 // Enhanced story node data interface matching our graph system
 interface StoryNodeData extends Record<string, unknown> {
@@ -329,10 +310,44 @@ function inferConnectionType(source: GraphNodeType, target: GraphNodeType): Conn
 
 // Main Canvas Component
 function StoryCanvas() {
+  const { t } = useTranslation()
   const { projectId } = Route.useParams()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const tour = useTour("openwrite-tour-canvas-v1")
+
+  const tourSteps: TourStep[] = useMemo(
+    () => [
+      {
+        target: '[data-tour="premise-card"]',
+        title: t("tour.premiseTitle", { defaultValue: "Start with a premise", ns: "canvas" }),
+        body: t("tour.premiseBody", {
+          defaultValue:
+            "One sentence is enough — it becomes the root node of your story map, ready to expand.",
+          ns: "canvas",
+        }),
+      },
+      {
+        target: '[title="Expand with AI"]',
+        title: t("tour.expandTitle", { defaultValue: "Expand any element", ns: "canvas" }),
+        body: t("tour.expandBody", {
+          defaultValue:
+            "The sparkle button breaks an element into the next level — premise into acts, acts into chapters, chapters into scenes. Add optional guidance to steer it.",
+          ns: "canvas",
+        }),
+      },
+      {
+        target: '[data-tour="canvas-elements"]',
+        title: t("tour.elementsTitle", { defaultValue: "Add elements by hand", ns: "canvas" }),
+        body: t("tour.elementsBody", {
+          defaultValue:
+            "Acts, scenes, beats, characters, locations, and lore — drop them anywhere and connect them by dragging between node handles.",
+          ns: "canvas",
+        }),
+      },
+    ],
+    [t]
+  )
 
   // Load graph data from API
   const { data: graphNodes = [], isLoading: nodesLoading } = useQuery({
@@ -1012,91 +1027,95 @@ function StoryCanvas() {
       {/* Menubar */}
       <Menubar className="rounded-none border-b">
         <MenubarMenu>
-          <MenubarTrigger data-tour="canvas-elements">Elements</MenubarTrigger>
+          <MenubarTrigger data-tour="canvas-elements">
+            {t("elements", { ns: "canvas" })}
+          </MenubarTrigger>
           <MenubarContent>
             <MenubarItem onClick={() => createGraphNode("story_element", "act")}>
               <Layers className="mr-2 h-4 w-4" />
-              New Act <MenubarShortcut>⌘1</MenubarShortcut>
+              {t("newAct", { ns: "canvas" })} <MenubarShortcut>⌘1</MenubarShortcut>
             </MenubarItem>
             <MenubarItem onClick={() => createGraphNode("story_element", "chapter")}>
               <Square className="mr-2 h-4 w-4" />
-              New Chapter <MenubarShortcut>⌘2</MenubarShortcut>
+              {t("newChapter", { ns: "canvas" })} <MenubarShortcut>⌘2</MenubarShortcut>
             </MenubarItem>
             <MenubarItem onClick={() => createGraphNode("story_element", "scene")}>
               <Circle className="mr-2 h-4 w-4" />
-              New Scene <MenubarShortcut>⌘3</MenubarShortcut>
+              {t("newScene", { ns: "canvas" })} <MenubarShortcut>⌘3</MenubarShortcut>
             </MenubarItem>
             <MenubarItem onClick={() => createGraphNode("story_element", "beat")}>
               <Triangle className="mr-2 h-4 w-4" />
-              New Beat <MenubarShortcut>⌘4</MenubarShortcut>
+              {t("newBeat", { ns: "canvas" })} <MenubarShortcut>⌘4</MenubarShortcut>
             </MenubarItem>
             <MenubarSeparator />
             <MenubarItem onClick={() => createGraphNode("story_element", "plot-point")}>
               <Target className="mr-2 h-4 w-4" />
-              New Plot Point <MenubarShortcut>⌘P</MenubarShortcut>
+              {t("newPlotPoint", { ns: "canvas" })} <MenubarShortcut>⌘P</MenubarShortcut>
             </MenubarItem>
             <MenubarSeparator />
             <MenubarItem onClick={() => createGraphNode("character")}>
               <Circle className="mr-2 h-4 w-4" />
-              New Character <MenubarShortcut>⌘C</MenubarShortcut>
+              {t("newCharacter", { ns: "canvas" })} <MenubarShortcut>⌘C</MenubarShortcut>
             </MenubarItem>
             <MenubarItem onClick={() => createGraphNode("location")}>
               <Square className="mr-2 h-4 w-4" />
-              New Location <MenubarShortcut>⌘L</MenubarShortcut>
+              {t("newLocation", { ns: "canvas" })} <MenubarShortcut>⌘L</MenubarShortcut>
             </MenubarItem>
             <MenubarItem onClick={() => createGraphNode("lore")}>
               <FileText className="mr-2 h-4 w-4" />
-              New Lore <MenubarShortcut>⌘R</MenubarShortcut>
+              {t("newLore", { ns: "canvas" })} <MenubarShortcut>⌘R</MenubarShortcut>
             </MenubarItem>
             <MenubarItem onClick={() => createGraphNode("plot_thread")}>
               <Target className="mr-2 h-4 w-4" />
-              New Plot Thread <MenubarShortcut>⌘T</MenubarShortcut>
+              {t("newPlotThread", { ns: "canvas" })} <MenubarShortcut>⌘T</MenubarShortcut>
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
 
         <MenubarMenu>
-          <MenubarTrigger>View</MenubarTrigger>
+          <MenubarTrigger>{t("view", { ns: "canvas" })}</MenubarTrigger>
           <MenubarContent>
             <MenubarItem onClick={() => zoomIn()}>
               <ZoomIn className="mr-2 h-4 w-4" />
-              Zoom In <MenubarShortcut>⌘+</MenubarShortcut>
+              {t("zoomIn", { ns: "canvas" })} <MenubarShortcut>⌘+</MenubarShortcut>
             </MenubarItem>
             <MenubarItem onClick={() => zoomOut()}>
               <ZoomOut className="mr-2 h-4 w-4" />
-              Zoom Out <MenubarShortcut>⌘-</MenubarShortcut>
+              {t("zoomOut", { ns: "canvas" })} <MenubarShortcut>⌘-</MenubarShortcut>
             </MenubarItem>
             <MenubarSeparator />
             <MenubarItem onClick={() => fitView()}>
               <FileText className="mr-2 h-4 w-4" />
-              Fit View <MenubarShortcut>⌘0</MenubarShortcut>
+              {t("fitView", { ns: "canvas" })} <MenubarShortcut>⌘0</MenubarShortcut>
             </MenubarItem>
             <MenubarItem onClick={applyAutoLayout}>
               <Network className="mr-2 h-4 w-4" />
-              Auto-layout
+              {t("autoLayout", { ns: "canvas" })}
             </MenubarItem>
             <MenubarSeparator />
             <MenubarItem onClick={tour.start}>
               <Sparkles className="mr-2 h-4 w-4" />
-              Show guide
+              {t("showGuide", { ns: "canvas" })}
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
 
         <MenubarMenu>
-          <MenubarTrigger>Edit</MenubarTrigger>
+          <MenubarTrigger>{t("edit", { ns: "canvas" })}</MenubarTrigger>
           <MenubarContent>
             <MenubarItem disabled>
               <Undo2 className="mr-2 h-4 w-4" />
-              Undo <MenubarShortcut>⌘Z</MenubarShortcut>
+              {t("formatting.undo", { defaultValue: "Undo", ns: "editor" })}{" "}
+              <MenubarShortcut>⌘Z</MenubarShortcut>
             </MenubarItem>
             <MenubarItem disabled>
               <Redo2 className="mr-2 h-4 w-4" />
-              Redo <MenubarShortcut>⌘⇧Z</MenubarShortcut>
+              {t("formatting.redo", { defaultValue: "Redo", ns: "editor" })}{" "}
+              <MenubarShortcut>⌘⇧Z</MenubarShortcut>
             </MenubarItem>
             <MenubarSeparator />
             <MenubarItem disabled={!selectedNode} onClick={deleteSelectedNode}>
-              Delete Selected <MenubarShortcut>⌫</MenubarShortcut>
+              {t("deleteSelected", { ns: "canvas" })} <MenubarShortcut>⌫</MenubarShortcut>
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
@@ -1144,17 +1163,15 @@ function StoryCanvas() {
                   <div className="rounded-lg bg-indigo-500 p-2 text-white">
                     <Sparkles className="h-4 w-4" />
                   </div>
-                  <h2 className="font-semibold text-lg">Start your story map</h2>
+                  <h2 className="font-semibold text-lg">{t("startStoryMap", { ns: "canvas" })}</h2>
                 </div>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  Describe your story in a sentence or two. Then expand it — premise into acts, acts
-                  into chapters, chapters into scenes — each level graphically connected to the
-                  last.
+                  {t("startStoryMapDesc", { ns: "canvas" })}
                 </p>
                 <Textarea
                   className="min-h-[80px] resize-none"
                   onChange={(e) => setPremiseText(e.target.value)}
-                  placeholder="A lighthouse keeper discovers the ships she guides ashore arrive from a century in the past…"
+                  placeholder={t("premisePlaceholder", { ns: "canvas" })}
                   rows={3}
                   value={premiseText}
                 />
@@ -1169,7 +1186,7 @@ function StoryCanvas() {
                   ) : (
                     <Sparkles className="mr-2 h-4 w-4" />
                   )}
-                  Create premise
+                  {t("createPremise", { ns: "canvas" })}
                 </Button>
               </div>
             </Panel>
@@ -1181,20 +1198,23 @@ function StoryCanvas() {
             position="top-right"
           >
             <div className="space-y-1 text-muted-foreground">
-              <div>Elements: {nodes.length}</div>
-              <div>Connections: {edges.length}</div>
-              <div>Selected: {selectedNode?.data.label || "None"}</div>
+              <div>
+                {t("elements", { ns: "canvas" })}: {nodes.length}
+              </div>
+              <div>
+                {t("connections", { ns: "canvas" })}: {edges.length}
+              </div>
+              <div>
+                {t("selected", { ns: "canvas" })}:{" "}
+                {selectedNode?.data.label || t("none", { ns: "canvas" })}
+              </div>
             </div>
           </Panel>
         </ReactFlow>
       </div>
 
       {/* First-visit walkthrough; replayable via View → Show guide */}
-      <GuidedTour
-        onFinish={tour.finish}
-        open={tour.open && !nodesLoading}
-        steps={CANVAS_TOUR_STEPS}
-      />
+      <GuidedTour onFinish={tour.finish} open={tour.open && !nodesLoading} steps={tourSteps} />
 
       {/* Expansion guidance dialog */}
       <Dialog
@@ -1209,15 +1229,20 @@ function StoryCanvas() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Sparkles className="h-4 w-4" />
-              Expand “{expandTarget?.label}”
+              {t("expand.title", {
+                defaultValue: `Expand “${expandTarget?.label}”`,
+                label: expandTarget?.label,
+                ns: "canvas",
+              })}
             </DialogTitle>
-            <DialogDescription>
-              AI breaks this element into the next level of your story, connected on the canvas.
-            </DialogDescription>
+            <DialogDescription>{t("expand.desc", { ns: "canvas" })}</DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
             <Label className="font-medium text-sm" htmlFor="expand-guidance">
-              Guidance <span className="font-normal text-muted-foreground">(optional)</span>
+              {t("expand.guidance", { ns: "canvas" })}{" "}
+              <span className="font-normal text-muted-foreground">
+                {t("expand.optional", { ns: "canvas" })}
+              </span>
             </Label>
             <Textarea
               className="min-h-[72px] resize-none"
@@ -1229,18 +1254,16 @@ function StoryCanvas() {
                   confirmExpand()
                 }
               }}
-              placeholder="Steer the expansion — e.g. “darker tone, five chapters, end on a betrayal”"
+              placeholder={t("expand.placeholder", { ns: "canvas" })}
               rows={3}
               value={expandGuidance}
             />
-            <p className="text-muted-foreground text-xs">
-              Press Enter to expand, Shift+Enter for a new line.
-            </p>
+            <p className="text-muted-foreground text-xs">{t("expand.hint", { ns: "canvas" })}</p>
           </div>
           <DialogFooter>
             <Button onClick={confirmExpand} type="button">
               <Sparkles className="mr-2 h-4 w-4" />
-              Expand
+              {t("expand.button", { ns: "canvas" })}
             </Button>
           </DialogFooter>
         </DialogContent>
