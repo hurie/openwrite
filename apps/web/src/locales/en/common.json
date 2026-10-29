@@ -15,7 +15,10 @@
     "search": "Search",
     "filter": "Filter",
     "loading": "Loading...",
-    "new": "New"
+    "new": "New",
+    "skip": "Skip",
+    "done": "Done",
+    "rename": "Rename"
   },
   "status": {
     "saved": "Saved",
@@ -32,6 +35,8 @@
     "name": "Name",
     "title": "Title",
     "description": "Description",
-    "type": "Type"
+    "type": "Type",
+    "of": "of",
+    "viewDetails": "View Details"
   }
 }

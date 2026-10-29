@@ -24,6 +24,7 @@ import {
   Undo2,
 } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -199,6 +200,8 @@ function LinkControl({ editor }: EditorToolbarProps) {
 }
 
 export function EditorToolbar({ editor }: EditorToolbarProps) {
+  const { t } = useTranslation()
+
   return (
     <div
       className="flex shrink-0 items-center gap-0.5 overflow-x-auto border-b bg-background px-2 py-1.5 [&>button]:shrink-0"
@@ -209,7 +212,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         disabled={!editor.can().undo()}
         onClick={() => editor.chain().focus().undo().run()}
         size="sm"
-        title="Undo"
+        title={t("formatting.undo", { defaultValue: "Undo", ns: "editor" })}
         type="button"
         variant="ghost"
       >
@@ -220,7 +223,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         disabled={!editor.can().redo()}
         onClick={() => editor.chain().focus().redo().run()}
         size="sm"
-        title="Redo"
+        title={t("formatting.redo", { defaultValue: "Redo", ns: "editor" })}
         type="button"
         variant="ghost"
       >
@@ -238,7 +241,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleBold().run()}
         pressed={editor.isActive("bold")}
         size="sm"
-        title="Bold"
+        title={t("formatting.bold", { defaultValue: "Bold", ns: "editor" })}
       >
         <Bold className="h-4 w-4" />
       </Toggle>
@@ -247,7 +250,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleItalic().run()}
         pressed={editor.isActive("italic")}
         size="sm"
-        title="Italic"
+        title={t("formatting.italic", { defaultValue: "Italic", ns: "editor" })}
       >
         <Italic className="h-4 w-4" />
       </Toggle>
@@ -256,7 +259,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleUnderline().run()}
         pressed={editor.isActive("underline")}
         size="sm"
-        title="Underline"
+        title={t("formatting.underline", { defaultValue: "Underline", ns: "editor" })}
       >
         <Underline className="h-4 w-4" />
       </Toggle>
@@ -265,7 +268,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleStrike().run()}
         pressed={editor.isActive("strike")}
         size="sm"
-        title="Strikethrough"
+        title={t("formatting.strikethrough", { defaultValue: "Strikethrough", ns: "editor" })}
       >
         <Strikethrough className="h-4 w-4" />
       </Toggle>
@@ -274,7 +277,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleCode().run()}
         pressed={editor.isActive("code")}
         size="sm"
-        title="Inline code"
+        title={t("formatting.code", { defaultValue: "Inline code", ns: "editor" })}
       >
         <Code className="h-4 w-4" />
       </Toggle>
@@ -287,7 +290,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().setTextAlign("left").run()}
         pressed={editor.isActive({ textAlign: "left" })}
         size="sm"
-        title="Align left"
+        title={t("formatting.alignLeft", { defaultValue: "Align left", ns: "editor" })}
       >
         <AlignLeft className="h-4 w-4" />
       </Toggle>
@@ -296,7 +299,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().setTextAlign("center").run()}
         pressed={editor.isActive({ textAlign: "center" })}
         size="sm"
-        title="Align center"
+        title={t("formatting.alignCenter", { defaultValue: "Align center", ns: "editor" })}
       >
         <AlignCenter className="h-4 w-4" />
       </Toggle>
@@ -305,7 +308,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().setTextAlign("right").run()}
         pressed={editor.isActive({ textAlign: "right" })}
         size="sm"
-        title="Align right"
+        title={t("formatting.alignRight", { defaultValue: "Align right", ns: "editor" })}
       >
         <AlignRight className="h-4 w-4" />
       </Toggle>
@@ -314,7 +317,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().setTextAlign("justify").run()}
         pressed={editor.isActive({ textAlign: "justify" })}
         size="sm"
-        title="Justify"
+        title={t("formatting.alignJustify", { defaultValue: "Justify", ns: "editor" })}
       >
         <AlignJustify className="h-4 w-4" />
       </Toggle>
@@ -326,7 +329,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
         pressed={editor.isActive("bulletList")}
         size="sm"
-        title="Bullet list"
+        title={t("formatting.bulletList", { defaultValue: "Bullet list", ns: "editor" })}
       >
         <List className="h-4 w-4" />
       </Toggle>
@@ -335,7 +338,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
         pressed={editor.isActive("orderedList")}
         size="sm"
-        title="Numbered list"
+        title={t("formatting.numberedList", { defaultValue: "Numbered list", ns: "editor" })}
       >
         <ListOrdered className="h-4 w-4" />
       </Toggle>
@@ -344,7 +347,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleTaskList().run()}
         pressed={editor.isActive("taskList")}
         size="sm"
-        title="Task list"
+        title={t("formatting.taskList", { defaultValue: "Task list", ns: "editor" })}
       >
         <ListTodo className="h-4 w-4" />
       </Toggle>
@@ -353,7 +356,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
         pressed={editor.isActive("blockquote")}
         size="sm"
-        title="Blockquote"
+        title={t("formatting.quote", { defaultValue: "Blockquote", ns: "editor" })}
       >
         <Quote className="h-4 w-4" />
       </Toggle>
@@ -362,7 +365,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onPressedChange={() => editor.chain().focus().toggleCodeBlock().run()}
         pressed={editor.isActive("codeBlock")}
         size="sm"
-        title="Code block"
+        title={t("formatting.code", { defaultValue: "Code block", ns: "editor" })}
       >
         <SquareCode className="h-4 w-4" />
       </Toggle>

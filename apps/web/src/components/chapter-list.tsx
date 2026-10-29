@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { ArrowDown, ArrowUp, Network, Pencil, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { Button } from "@/components/ui/button"
@@ -22,6 +23,7 @@ export function ChapterList({
   selectedChapterId,
   onSelect,
 }: ChapterListProps) {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingTitle, setEditingTitle] = useState("")
@@ -92,13 +94,13 @@ export function ChapterList({
   return (
     <div className="flex h-full w-60 flex-col border-r bg-muted/20" data-tour="chapters">
       <div className="flex items-center justify-between border-b p-3">
-        <span className="font-medium text-sm">Chapters</span>
+        <span className="font-medium text-sm">{t("chapters", { ns: "editor" })}</span>
         <Button
           className="h-7 w-7 p-0"
           disabled={createMutation.isPending}
           onClick={() => createMutation.mutate()}
           size="sm"
-          title="New chapter"
+          title={t("newChapter", { ns: "editor" })}
           type="button"
           variant="ghost"
         >
@@ -109,7 +111,7 @@ export function ChapterList({
       <div className="flex-1 space-y-0.5 overflow-y-auto p-2">
         {chapters.length === 0 && (
           <p className="px-2 py-4 text-muted-foreground text-xs">
-            No chapters yet. Create one to start writing.
+            {t("noChaptersYet", { ns: "editor" })}
           </p>
         )}
 
@@ -146,7 +148,7 @@ export function ChapterList({
                 >
                   <span className="block truncate font-medium text-sm">{ch.title}</span>
                   <span className="block text-muted-foreground text-xs">
-                    {ch.wordCount.toLocaleString()} words
+                    {ch.wordCount.toLocaleString()} {t("words", { ns: "editor" })}
                   </span>
                 </button>
 
@@ -156,7 +158,7 @@ export function ChapterList({
                     disabled={index === 0 || reorderMutation.isPending}
                     onClick={() => move(ch.id, -1)}
                     size="sm"
-                    title="Move up"
+                    title={t("moveUp", { ns: "editor" })}
                     type="button"
                     variant="ghost"
                   >
@@ -167,7 +169,7 @@ export function ChapterList({
                     disabled={index === chapters.length - 1 || reorderMutation.isPending}
                     onClick={() => move(ch.id, 1)}
                     size="sm"
-                    title="Move down"
+                    title={t("moveDown", { ns: "editor" })}
                     type="button"
                     variant="ghost"
                   >
@@ -177,23 +179,23 @@ export function ChapterList({
                     className="h-6 w-6 p-0"
                     onClick={() => startRename(ch)}
                     size="sm"
-                    title="Rename"
+                    title={t("actions.rename", { ns: "common" })}
                     type="button"
                     variant="ghost"
                   >
                     <Pencil className="h-3 w-3" />
                   </Button>
                   <ConfirmDialog
-                    confirmText="Delete"
+                    confirmText={t("actions.delete", { ns: "common" })}
                     description={`Delete "${ch.title}" and its content? This cannot be undone.`}
                     onConfirm={() => deleteMutation.mutate(ch.id)}
-                    title="Delete chapter"
+                    title={t("deleteChapter", { ns: "editor" })}
                     variant="destructive"
                   >
                     <Button
                       className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
                       size="sm"
-                      title="Delete"
+                      title={t("actions.delete", { ns: "common" })}
                       type="button"
                       variant="ghost"
                     >
@@ -216,7 +218,7 @@ export function ChapterList({
         >
           <Link params={{ projectId }} to="/projects/$projectId/canvas">
             <Network className="mr-2 h-4 w-4" />
-            Map your story
+            {t("mapYourStory", { ns: "editor" })}
           </Link>
         </Button>
       </div>

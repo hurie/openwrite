@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { ChevronDown, ChevronRight, Edit, FileText, MapPin, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { DeleteLocationDialog } from "@/components/delete-location-dialog"
 import { LocationDialog } from "@/components/location-dialog"
 import { Badge } from "@/components/ui/badge"
@@ -29,6 +30,7 @@ export function LocationSidebarSection({
   onToggle,
   onOpenCodexModal,
 }: LocationSidebarSectionProps) {
+  const { t } = useTranslation()
   const [locationDialogOpen, setLocationDialogOpen] = useState(false)
   const [locationDialogMode, setLocationDialogMode] = useState<"create" | "edit">("create")
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
@@ -72,7 +74,7 @@ export function LocationSidebarSection({
                 <ChevronRight className="h-4 w-4" />
               )}
               <MapPin className="h-4 w-4" />
-              <span>Locations</span>
+              <span>{t("locations", { ns: "navigation" })}</span>
               <Badge className="ml-auto" variant="secondary">
                 {locations.length}
               </Badge>
@@ -87,7 +89,7 @@ export function LocationSidebarSection({
                 variant="ghost"
               >
                 <Plus className="h-4 w-4" />
-                <span>New</span>
+                <span>{t("actions.new", { ns: "common" })}</span>
               </Button>
               {locations.map((location) => (
                 <ContextMenu key={location.id}>
@@ -105,11 +107,11 @@ export function LocationSidebarSection({
                   <ContextMenuContent>
                     <ContextMenuItem onClick={() => onOpenCodexModal("locations", location.name)}>
                       <FileText className="mr-2 h-4 w-4" />
-                      View Details
+                      {t("labels.viewDetails", { defaultValue: "View Details", ns: "common" })}
                     </ContextMenuItem>
                     <ContextMenuItem onClick={() => handleEditLocation(location)}>
                       <Edit className="mr-2 h-4 w-4" />
-                      Edit Location
+                      {t("editLocation", { ns: "canvas" })}
                     </ContextMenuItem>
                     <ContextMenuSeparator />
                     <ContextMenuItem
@@ -117,7 +119,7 @@ export function LocationSidebarSection({
                       onClick={() => handleDeleteLocation(location)}
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
-                      Delete Location
+                      {t("deleteLocation", { ns: "canvas" })}
                     </ContextMenuItem>
                   </ContextMenuContent>
                 </ContextMenu>
