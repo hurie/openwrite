@@ -1,0 +1,18 @@
+{
+  "projects": "Projects",
+  "myProjects": "My Projects",
+  "newProject": "New Project",
+  "createProject": "Create Project",
+  "projectName": "Project Name",
+  "projectDescription": "Project Description",
+  "import": "Import",
+  "export": "Export",
+  "searchProjects": "Search projects...",
+  "noProjectsFound": "No projects found",
+  "wordCount": "Word count",
+  "lastEdited": "Last edited",
+  "deleteProject": "Delete Project",
+  "deleteProjectConfirmation": "Are you sure you want to delete this project? This action cannot be undone.",
+  "renameProject": "Rename Project",
+  "projectSettings": "Project Settings"
+}

@@ -1,0 +1,18 @@
+{
+  "projects": "Proyek",
+  "myProjects": "Proyek Saya",
+  "newProject": "Proyek Baru",
+  "createProject": "Buat Proyek",
+  "projectName": "Nama Proyek",
+  "projectDescription": "Deskripsi Proyek",
+  "import": "Impor",
+  "export": "Ekspor",
+  "searchProjects": "Cari proyek...",
+  "noProjectsFound": "Tidak ada proyek ditemukan",
+  "wordCount": "Jumlah kata",
+  "lastEdited": "Terakhir disunting",
+  "deleteProject": "Hapus Proyek",
+  "deleteProjectConfirmation": "Apakah Anda yakin ingin menghapus proyek ini? Tindakan ini tidak dapat dibatalkan.",
+  "renameProject": "Ubah Nama Proyek",
+  "projectSettings": "Pengaturan Proyek"
+}

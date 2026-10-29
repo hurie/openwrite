@@ -1,0 +1,16 @@
+{
+  "settings": "Settings",
+  "general": "General",
+  "appearance": "Appearance",
+  "theme": "Theme",
+  "language": "Language",
+  "selectLanguage": "Select language",
+  "aiProviders": "AI Providers",
+  "apiKeys": "API Keys",
+  "modelSelection": "Model Selection",
+  "customEndpoint": "Custom Endpoint",
+  "connectProvider": "Connect Provider",
+  "disconnectProvider": "Disconnect Provider",
+  "saveSettings": "Save Settings",
+  "settingsSaved": "Settings saved successfully"
+}

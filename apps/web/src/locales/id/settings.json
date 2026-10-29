@@ -1,0 +1,16 @@
+{
+  "settings": "Pengaturan",
+  "general": "Umum",
+  "appearance": "Tampilan",
+  "theme": "Tema",
+  "language": "Bahasa",
+  "selectLanguage": "Pilih bahasa",
+  "aiProviders": "Penyedia AI",
+  "apiKeys": "Kunci API",
+  "modelSelection": "Pemilihan Model",
+  "customEndpoint": "Endpoint Kustom",
+  "connectProvider": "Hubungkan Penyedia",
+  "disconnectProvider": "Putuskan Penyedia",
+  "saveSettings": "Simpan Pengaturan",
+  "settingsSaved": "Pengaturan berhasil disimpan"
+}
