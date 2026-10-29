@@ -6,6 +6,7 @@ import { CheckCircle, Plus, Trash2 } from "lucide-react"
 const successIcon = <CheckCircle className="h-4 w-4" />
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { OllamaSetup } from "@/components/ollama-setup"
@@ -72,6 +73,7 @@ interface ProviderFormProps {
 }
 
 function AIProvidersPage() {
+  const { t } = useTranslation()
   const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null)
   const [_oauthProcessing, setOauthProcessing] = useState(false)
   const queryClient = useQueryClient()
@@ -85,17 +87,34 @@ function AIProvidersPage() {
   })
 
   if (error) {
-    toast.error(`Failed to load AI providers: ${error.message}`)
+    toast.error(
+      t("toasts.loadFailed", {
+        defaultValue: `Failed to load AI providers: ${error.message}`,
+        error: error.message,
+        ns: "settings",
+      })
+    )
   }
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => aiProvidersApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ai-providers"] })
-      toast.success("Provider disconnected successfully")
+      toast.success(
+        t("toasts.providerDisconnected", {
+          defaultValue: "Provider disconnected successfully",
+          ns: "settings",
+        })
+      )
     },
     onError: (deleteError: Error) => {
-      toast.error(`Failed to disconnect provider: ${deleteError.message}`)
+      toast.error(
+        t("toasts.disconnectFailed", {
+          defaultValue: `Failed to disconnect provider: ${deleteError.message}`,
+          error: deleteError.message,
+          ns: "settings",
+        })
+      )
     },
   })
 
@@ -108,13 +127,25 @@ function AIProvidersPage() {
     }) => aiProvidersApi.exchangeOAuth(params),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ai-providers"] })
-      toast.success("Provider connected successfully via OAuth", {
-        icon: successIcon,
-      })
+      toast.success(
+        t("toasts.providerConnectedOAuth", {
+          defaultValue: "Provider connected successfully via OAuth",
+          ns: "settings",
+        }),
+        {
+          icon: successIcon,
+        }
+      )
       setOauthProcessing(false)
     },
     onError: (oauthError: Error) => {
-      toast.error(`OAuth connection failed: ${oauthError.message}`)
+      toast.error(
+        t("toasts.oauthFailed", {
+          defaultValue: `OAuth connection failed: ${oauthError.message}`,
+          error: oauthError.message,
+          ns: "settings",
+        })
+      )
       setOauthProcessing(false)
     },
   })
@@ -258,23 +289,38 @@ function AIProvidersPage() {
   return (
     <div className="container mx-auto space-y-6 p-6">
       <div className="space-y-2">
-        <h1 className="font-bold text-2xl sm:text-3xl">AI Providers</h1>
+        <h1 className="font-bold text-2xl sm:text-3xl">
+          {t("aiProviders", { defaultValue: "AI Providers", ns: "settings" })}
+        </h1>
         <p className="text-muted-foreground text-sm sm:text-base">
-          Connect your AI providers to start generating content
+          {t("aiProvidersDesc", {
+            defaultValue: "Connect your AI providers to start generating content",
+            ns: "settings",
+          })}
         </p>
       </div>
 
       {providers && providers.length > 0 && (
         <div className="space-y-4">
-          <h2 className="font-semibold text-lg sm:text-xl">Connected Providers</h2>
+          <h2 className="font-semibold text-lg sm:text-xl">
+            {t("connectedProviders", { defaultValue: "Connected Providers", ns: "settings" })}
+          </h2>
           <div className="overflow-x-auto rounded-md border">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="min-w-32">Provider</TableHead>
-                  <TableHead className="min-w-48">Description</TableHead>
-                  <TableHead className="w-24">Status</TableHead>
-                  <TableHead className="w-16 text-right">Actions</TableHead>
+                  <TableHead className="min-w-32">
+                    {t("table.provider", { defaultValue: "Provider", ns: "settings" })}
+                  </TableHead>
+                  <TableHead className="min-w-48">
+                    {t("table.description", { defaultValue: "Description", ns: "settings" })}
+                  </TableHead>
+                  <TableHead className="w-24">
+                    {t("table.status", { defaultValue: "Status", ns: "settings" })}
+                  </TableHead>
+                  <TableHead className="w-16 text-right">
+                    {t("table.actions", { defaultValue: "Actions", ns: "settings" })}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -289,7 +335,10 @@ function AIProvidersPage() {
                           </span>
                           {providerData?.recommended && (
                             <Badge className="text-xs" variant="secondary">
-                              Recommended
+                              {t("badges.recommended", {
+                                defaultValue: "Recommended",
+                                ns: "settings",
+                              })}
                             </Badge>
                           )}
                         </div>
@@ -299,15 +348,22 @@ function AIProvidersPage() {
                       </TableCell>
                       <TableCell>
                         <Badge className="text-xs" variant="default">
-                          Connected
+                          {t("badges.connected", { defaultValue: "Connected", ns: "settings" })}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <ConfirmDialog
-                          confirmText="Delete"
-                          description="Are you sure you want to delete this AI provider? This action cannot be undone."
+                          confirmText={t("actions.delete", { ns: "common" })}
+                          description={t("deleteProviderDesc", {
+                            defaultValue:
+                              "Are you sure you want to delete this AI provider? This action cannot be undone.",
+                            ns: "settings",
+                          })}
                           onConfirm={() => deleteMutation.mutate(provider.id)}
-                          title="Delete AI Provider"
+                          title={t("deleteProviderTitle", {
+                            defaultValue: "Delete AI Provider",
+                            ns: "settings",
+                          })}
                           variant="destructive"
                         >
                           <Button className="h-6 px-2 text-xs" variant="destructive">
@@ -326,15 +382,25 @@ function AIProvidersPage() {
 
       {availableProviders.some((p) => p.enabled) && (
         <div className="space-y-4">
-          <h2 className="font-semibold text-lg sm:text-xl">Available Providers</h2>
+          <h2 className="font-semibold text-lg sm:text-xl">
+            {t("availableProviders", { defaultValue: "Available Providers", ns: "settings" })}
+          </h2>
           <div className="overflow-x-auto rounded-md border">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="min-w-32">Provider</TableHead>
-                  <TableHead className="min-w-48">Description</TableHead>
-                  <TableHead className="w-24">Status</TableHead>
-                  <TableHead className="w-16 text-right">Actions</TableHead>
+                  <TableHead className="min-w-32">
+                    {t("table.provider", { defaultValue: "Provider", ns: "settings" })}
+                  </TableHead>
+                  <TableHead className="min-w-48">
+                    {t("table.description", { defaultValue: "Description", ns: "settings" })}
+                  </TableHead>
+                  <TableHead className="w-24">
+                    {t("table.status", { defaultValue: "Status", ns: "settings" })}
+                  </TableHead>
+                  <TableHead className="w-16 text-right">
+                    {t("table.actions", { defaultValue: "Actions", ns: "settings" })}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -359,7 +425,10 @@ function AIProvidersPage() {
                           <span className="font-medium">{provider.name}</span>
                           {provider.recommended && (
                             <Badge className="text-xs" variant="secondary">
-                              Recommended
+                              {t("badges.recommended", {
+                                defaultValue: "Recommended",
+                                ns: "settings",
+                              })}
                             </Badge>
                           )}
                         </div>
@@ -369,7 +438,7 @@ function AIProvidersPage() {
                       </TableCell>
                       <TableCell>
                         <Badge className="text-xs" variant="outline">
-                          Available
+                          {t("badges.available", { defaultValue: "Available", ns: "settings" })}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -385,9 +454,19 @@ function AIProvidersPage() {
                           </DialogTrigger>
                           <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
                             <DialogHeader>
-                              <DialogTitle>Connect {provider.name}</DialogTitle>
+                              <DialogTitle>
+                                {t("connectProviderName", {
+                                  defaultValue: `Connect ${provider.name}`,
+                                  name: provider.name,
+                                  ns: "settings",
+                                })}
+                              </DialogTitle>
                               <DialogDescription>
-                                Connect to {provider.name} to access their models
+                                {t("connectProviderDesc", {
+                                  defaultValue: `Connect to ${provider.name} to access their models`,
+                                  name: provider.name,
+                                  ns: "settings",
+                                })}
                               </DialogDescription>
                             </DialogHeader>
                             <div className="max-h-[calc(90vh-8rem)] overflow-y-auto pr-2">
@@ -468,6 +547,7 @@ function useProviderSubmit(options: {
   setApiKey: (key: string) => void
   availableProviders: AIProvider[]
 }) {
+  const { t } = useTranslation()
   const {
     selectedProvider,
     selectedProviderSupportsPKCE,
@@ -501,9 +581,16 @@ function useProviderSubmit(options: {
       // Get provider name for the toast
       const providerData = availableProviders.find((p) => p.id === selectedProvider)
       const providerName = providerData?.name || "AI Provider"
-      toast.success(`${providerName} connected successfully`, {
-        icon: successIcon,
-      })
+      toast.success(
+        t("toasts.providerConnected", {
+          defaultValue: `${providerName} connected successfully`,
+          name: providerName,
+          ns: "settings",
+        }),
+        {
+          icon: successIcon,
+        }
+      )
       onSuccess()
       setSelectedProvider("")
       setApiKey("")
@@ -525,6 +612,7 @@ function AddProviderForm({
   preSelectedProviderId?: string | null
   onSuccess: () => void
 }) {
+  const { t } = useTranslation()
   const [selectedProvider, setSelectedProvider] = useState(preSelectedProviderId || "")
   const [apiKey, setApiKey] = useState("")
   const [baseUrl, setBaseUrl] = useState("")
@@ -558,9 +646,15 @@ function AddProviderForm({
           ...(model.trim() ? { defaultModel: model.trim() } : {}),
         },
       })
-      toast.success("Ollama connected successfully", {
-        icon: successIcon,
-      })
+      toast.success(
+        t("toasts.ollamaConnected", {
+          defaultValue: "Ollama connected successfully",
+          ns: "settings",
+        }),
+        {
+          icon: successIcon,
+        }
+      )
       onSuccess()
       setSelectedProvider("")
       setApiKey("")
@@ -626,12 +720,21 @@ function ProviderSelector({
   availableProviders: AIProvider[]
   selectedProviderData: AIProvider | undefined
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-2">
-      <Label htmlFor="provider">Select Provider</Label>
+      <Label htmlFor="provider">
+        {t("selectProvider", { defaultValue: "Select Provider", ns: "settings" })}
+      </Label>
       <Select onValueChange={setSelectedProvider} value={selectedProvider}>
         <SelectTrigger>
-          <SelectValue placeholder="Choose an AI provider" />
+          <SelectValue
+            placeholder={t("chooseAiProvider", {
+              defaultValue: "Choose an AI provider",
+              ns: "settings",
+            })}
+          />
         </SelectTrigger>
         <SelectContent>
           {availableProviders.map((provider) => (
@@ -640,7 +743,7 @@ function ProviderSelector({
                 {provider.name}
                 {provider.recommended && (
                   <Badge className="text-xs" variant="secondary">
-                    Recommended
+                    {t("badges.recommended", { defaultValue: "Recommended", ns: "settings" })}
                   </Badge>
                 )}
               </div>
@@ -656,14 +759,22 @@ function ProviderSelector({
 }
 
 function ProviderInfo({ selectedProviderData }: { selectedProviderData: AIProvider }) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-2">
-      <Label>Connecting to Provider</Label>
+      <Label>
+        {t("connectingToProvider", { defaultValue: "Connecting to Provider", ns: "settings" })}
+      </Label>
       <div className="flex items-center gap-3 rounded-md border p-3">
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span className="font-medium">{selectedProviderData.name}</span>
-            {selectedProviderData.recommended && <Badge variant="secondary">Recommended</Badge>}
+            {selectedProviderData.recommended && (
+              <Badge variant="secondary">
+                {t("badges.recommended", { defaultValue: "Recommended", ns: "settings" })}
+              </Badge>
+            )}
           </div>
           <p className="text-muted-foreground text-sm">{selectedProviderData.description}</p>
         </div>
@@ -683,6 +794,8 @@ function OAuthSection({
   setShowManualApiKey: (show: boolean) => void
   handleOAuthLogin: () => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-3">
       <Separator />
@@ -695,7 +808,12 @@ function OAuthSection({
             type="button"
             variant="default"
           >
-            {oauthLoading ? "Connecting..." : "OAuth Login (Recommended)"}
+            {oauthLoading
+              ? t("connecting", { defaultValue: "Connecting...", ns: "settings" })
+              : t("oauthLoginRecommended", {
+                  defaultValue: "OAuth Login (Recommended)",
+                  ns: "settings",
+                })}
           </Button>
           <Button
             className="flex-1"
@@ -703,7 +821,7 @@ function OAuthSection({
             type="button"
             variant="outline"
           >
-            Manual API Key
+            {t("manualApiKey", { defaultValue: "Manual API Key", ns: "settings" })}
           </Button>
         </div>
       )}
@@ -726,10 +844,15 @@ function ApiKeySection({
   setShowManualApiKey: (show: boolean) => void
   optional?: boolean
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <Label htmlFor="apiKey">API Key{optional ? " (optional)" : ""}</Label>
+        <Label htmlFor="apiKey">
+          {t("apiKeys", { defaultValue: "API Key", ns: "settings" })}
+          {optional ? ` (${t("status.optional", { defaultValue: "optional", ns: "common" })})` : ""}
+        </Label>
         {selectedProviderSupportsPKCE && showManualApiKey && (
           <Button
             onClick={() => setShowManualApiKey(false)}
@@ -737,20 +860,30 @@ function ApiKeySection({
             type="button"
             variant="ghost"
           >
-            ← Back to OAuth
+            {t("backToOAuth", { defaultValue: "← Back to OAuth", ns: "settings" })}
           </Button>
         )}
       </div>
       <Input
         id="apiKey"
         onChange={(e) => setApiKey(e.target.value)}
-        placeholder={optional ? "Leave blank if the endpoint needs no key" : "Enter your API key"}
+        placeholder={
+          optional
+            ? t("keylessPlaceholder", {
+                defaultValue: "Leave blank if the endpoint needs no key",
+                ns: "settings",
+              })
+            : t("enterApiKey", { defaultValue: "Enter your API key", ns: "settings" })
+        }
         required={!optional}
         type="password"
         value={apiKey}
       />
       <p className="mt-1 text-muted-foreground text-sm">
-        Your API key will be encrypted and stored securely
+        {t("apiKeySecureNote", {
+          defaultValue: "Your API key will be encrypted and stored securely",
+          ns: "settings",
+        })}
       </p>
     </div>
   )
@@ -775,9 +908,11 @@ function BaseUrlSection({
   baseUrl: string
   setBaseUrl: (url: string) => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-2">
-      <Label htmlFor="baseUrl">Base URL</Label>
+      <Label htmlFor="baseUrl">{t("baseUrl", { defaultValue: "Base URL", ns: "settings" })}</Label>
       <Input
         id="baseUrl"
         onChange={(e) => setBaseUrl(e.target.value)}
@@ -788,13 +923,18 @@ function BaseUrlSection({
       />
       {isLoopbackUrl(baseUrl) ? (
         <p className="mt-1 text-amber-600 text-sm dark:text-amber-500">
-          Requests are made by the OpenWrite server, which cannot reach your machine's{" "}
-          <code>localhost</code>. Expose the endpoint with a tunnel (ngrok, cloudflared) and paste
-          that URL instead — unless you are self-hosting the server locally.
+          {t("loopbackWarning", {
+            defaultValue:
+              "Requests are made by the OpenWrite server, which cannot reach your machine's localhost. Expose the endpoint with a tunnel (ngrok, cloudflared) and paste that URL instead — unless you are self-hosting the server locally.",
+            ns: "settings",
+          })}
         </p>
       ) : (
         <p className="mt-1 text-muted-foreground text-sm">
-          The OpenAI-compatible base URL. <code>/chat/completions</code> is appended for you.
+          {t("baseUrlDesc", {
+            defaultValue: "The OpenAI-compatible base URL. /chat/completions is appended for you.",
+            ns: "settings",
+          })}
         </p>
       )}
     </div>
@@ -810,9 +950,14 @@ function ModelSection({
   setModel: (model: string) => void
   required: boolean
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-2">
-      <Label htmlFor="model">Model{required ? "" : " (optional)"}</Label>
+      <Label htmlFor="model">
+        {t("model", { defaultValue: "Model", ns: "settings" })}
+        {required ? "" : ` (${t("status.optional", { defaultValue: "optional", ns: "common" })})`}
+      </Label>
       <Input
         id="model"
         onChange={(e) => setModel(e.target.value)}
@@ -823,8 +968,15 @@ function ModelSection({
       />
       <p className="mt-1 text-muted-foreground text-sm">
         {required
-          ? "The model ID this endpoint serves."
-          : "Leave blank to use the provider's default. On OpenRouter, a :free model costs nothing."}
+          ? t("modelIdRequiredDesc", {
+              defaultValue: "The model ID this endpoint serves.",
+              ns: "settings",
+            })
+          : t("modelIdOptionalDesc", {
+              defaultValue:
+                "Leave blank to use the provider's default. On OpenRouter, a :free model costs nothing.",
+              ns: "settings",
+            })}
       </p>
     </div>
   )
@@ -851,6 +1003,7 @@ function ProviderForm({
   handleOAuthLogin,
   handleOllamaConnect,
 }: ProviderFormProps) {
+  const { t } = useTranslation()
   // Extract button state logic for better readability
   const hasSelectedProvider = !!selectedProvider
   const canUseOAuth = selectedProviderSupportsPKCE && !showManualApiKey
@@ -920,7 +1073,9 @@ function ProviderForm({
       {selectedProvider !== "ollama" && (
         <div className="flex gap-2 pt-4">
           <Button disabled={isSubmitDisabled} type="submit">
-            {loading ? "Connecting..." : "Connect Provider"}
+            {loading
+              ? t("connecting", { defaultValue: "Connecting...", ns: "settings" })
+              : t("connectProvider", { defaultValue: "Connect Provider", ns: "settings" })}
           </Button>
         </div>
       )}

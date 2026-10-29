@@ -35,8 +35,11 @@ function OrganizationSettingsPage() {
       <Alert>
         <Settings className="h-4 w-4" />
         <AlertDescription>
-          Organization settings are coming soon! You'll be able to configure themes, manage members,
-          set permissions, and customize your workspace.
+          {t("orgSettingsComingSoon", {
+            defaultValue:
+              "Organization settings are coming soon! You'll be able to configure themes, manage members, set permissions, and customize your workspace.",
+            ns: "settings",
+          })}
         </AlertDescription>
       </Alert>
     </div>
