@@ -57,5 +57,34 @@
   "projectSettings": "Pengaturan Proyek",
   "loadingProject": "Memuat proyek...",
   "projectNotFound": "Proyek tidak ditemukan",
-  "backToProjects": "Kembali ke Proyek"
+  "backToProjects": "Kembali ke Proyek",
+  "type": "Tipe",
+  "progress": "Kemajuan",
+  "statuses": {
+    "draft": "draf",
+    "in_progress": "sedang dikerjakan",
+    "completed": "selesai",
+    "archived": "diarsipkan"
+  },
+  "dashboard": {
+    "welcomeBack": "Selamat datang kembali!",
+    "welcomeDesc": "Berikut rangkuman aktivitas kepenulisan Anda.",
+    "totalProjects": "Total Proyek",
+    "activeProjects": "{{count}} proyek aktif",
+    "totalWords": "Total Kata",
+    "acrossAllProjects": "Di seluruh proyek",
+    "thisWeek": "Minggu Ini",
+    "wordsWritten": "Kata yang ditulis",
+    "organization": "Organisasi",
+    "teamMember": "Anggota tim",
+    "recentProjects": "Proyek Terbaru",
+    "recentProjectsDesc": "Proyek kepenulisan terbaru Anda",
+    "writingProgress": "Kemajuan Penulisan",
+    "goalCompletion": "Pencapaian target di seluruh proyek",
+    "noActiveGoals": "Tidak ada proyek aktif dengan target kata",
+    "loadErrorTitle": "Tidak dapat memuat dasbor",
+    "loadErrorDesc": "Terjadi masalah saat memuat data kepenulisan Anda. Silakan coba muat ulang halaman.",
+    "refreshPage": "Muat Ulang Halaman",
+    "loadErrorToast": "Gagal memuat proyek. Silakan coba muat ulang halaman."
+  }
 }

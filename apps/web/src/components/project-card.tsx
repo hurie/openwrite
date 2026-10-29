@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { BookOpen, Edit } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,6 +12,8 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, onEdit }: ProjectCardProps) {
+  const { t } = useTranslation()
+
   return (
     <Card className="relative transition-shadow hover:shadow-lg">
       {onEdit && (
@@ -35,7 +38,10 @@ export function ProjectCard({ project, onEdit }: ProjectCardProps) {
             <div className="flex items-start justify-between pr-8">
               <BookOpen className="h-8 w-8 text-blue-600" />
               <Badge variant={project.status === "draft" ? "secondary" : "default"}>
-                {project.status}
+                {t(`statuses.${project.status}`, {
+                  defaultValue: project.status,
+                  ns: "projects",
+                })}
               </Badge>
             </div>
             <CardTitle className="mt-4 truncate">{project.title}</CardTitle>
@@ -46,18 +52,31 @@ export function ProjectCard({ project, onEdit }: ProjectCardProps) {
           <CardContent>
             <div className="space-y-2">
               <div className="text-gray-600 text-sm">
-                <span className="font-medium">Type:</span>{" "}
-                {project.type.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                <span className="font-medium">
+                  {t("type", { defaultValue: "Type", ns: "projects" })}:
+                </span>{" "}
+                {t(`types.${project.type}`, {
+                  defaultValue: project.type
+                    .replace("_", " ")
+                    .replace(/\b\w/g, (l) => l.toUpperCase()),
+                  ns: "projects",
+                })}
               </div>
               {project.genre && (
                 <div className="text-gray-600 text-sm">
-                  <span className="font-medium">Genre:</span> {project.genre}
+                  <span className="font-medium">
+                    {t("genre", { defaultValue: "Genre", ns: "projects" })}:
+                  </span>{" "}
+                  {project.genre}
                 </div>
               )}
               <div className="text-gray-600 text-sm">
-                <span className="font-medium">Progress:</span>{" "}
+                <span className="font-medium">
+                  {t("progress", { defaultValue: "Progress", ns: "projects" })}:
+                </span>{" "}
                 {project.currentWordCount.toLocaleString()} /{" "}
-                {project.targetWordCount?.toLocaleString() || "∞"} words
+                {project.targetWordCount?.toLocaleString() || "∞"}{" "}
+                {t("words", { defaultValue: "words", ns: "editor" })}
               </div>
               {project.targetWordCount && (
                 <div className="h-2 w-full rounded-full bg-gray-200">

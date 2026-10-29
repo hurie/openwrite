@@ -57,5 +57,34 @@
   "projectSettings": "Project Settings",
   "loadingProject": "Loading project...",
   "projectNotFound": "Project not found",
-  "backToProjects": "Back to Projects"
+  "backToProjects": "Back to Projects",
+  "type": "Type",
+  "progress": "Progress",
+  "statuses": {
+    "draft": "draft",
+    "in_progress": "in progress",
+    "completed": "completed",
+    "archived": "archived"
+  },
+  "dashboard": {
+    "welcomeBack": "Welcome back!",
+    "welcomeDesc": "Here's what's happening with your writing.",
+    "totalProjects": "Total Projects",
+    "activeProjects": "{{count}} active projects",
+    "totalWords": "Total Words",
+    "acrossAllProjects": "Across all projects",
+    "thisWeek": "This Week",
+    "wordsWritten": "Words written",
+    "organization": "Organization",
+    "teamMember": "Team member",
+    "recentProjects": "Recent Projects",
+    "recentProjectsDesc": "Your latest writing projects",
+    "writingProgress": "Writing Progress",
+    "goalCompletion": "Goal completion across projects",
+    "noActiveGoals": "No active projects with word goals",
+    "loadErrorTitle": "Unable to load dashboard",
+    "loadErrorDesc": "There was a problem loading your writing data. Please try refreshing the page.",
+    "refreshPage": "Refresh Page",
+    "loadErrorToast": "Failed to load projects. Please try refreshing the page."
+  }
 }
