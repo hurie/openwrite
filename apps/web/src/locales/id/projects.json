@@ -14,5 +14,8 @@
   "deleteProject": "Hapus Proyek",
   "deleteProjectConfirmation": "Apakah Anda yakin ingin menghapus proyek ini? Tindakan ini tidak dapat dibatalkan.",
   "renameProject": "Ubah Nama Proyek",
-  "projectSettings": "Pengaturan Proyek"
+  "projectSettings": "Pengaturan Proyek",
+  "loadingProject": "Memuat proyek...",
+  "projectNotFound": "Proyek tidak ditemukan",
+  "backToProjects": "Kembali ke Proyek"
 }

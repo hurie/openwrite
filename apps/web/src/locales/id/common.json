@@ -15,7 +15,10 @@
     "search": "Cari",
     "filter": "Saring",
     "loading": "Memuat...",
-    "new": "Baru"
+    "new": "Baru",
+    "skip": "Lewati",
+    "done": "Selesai",
+    "rename": "Ubah Nama"
   },
   "status": {
     "saved": "Tersimpan",
@@ -32,6 +35,8 @@
     "name": "Nama",
     "title": "Judul",
     "description": "Deskripsi",
-    "type": "Tipe"
+    "type": "Tipe",
+    "of": "dari",
+    "viewDetails": "Lihat Detail"
   }
 }

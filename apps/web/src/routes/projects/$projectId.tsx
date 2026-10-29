@@ -3,6 +3,7 @@ import { createFileRoute, Link, Outlet } from "@tanstack/react-router"
 import { Sparkles } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useTranslation } from "react-i18next"
 import { AIChatContent } from "@/components/ai-chat-content"
 
 import { ProjectSidebar } from "@/components/project-sidebar"
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/projects/$projectId")({
 })
 
 function WriteLayout() {
+  const { t } = useTranslation()
   const { projectId } = Route.useParams()
   const isMobile = useIsMobile()
   // On mobile the assistant is a full-screen sheet, so it must not auto-open
@@ -77,7 +79,7 @@ function WriteLayout() {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <div className="animate-pulse">Loading project...</div>
+        <div className="animate-pulse">{t("loadingProject", { ns: "projects" })}</div>
       </div>
     )
   }
@@ -86,8 +88,10 @@ function WriteLayout() {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
-          <h2 className="mb-2 font-semibold text-2xl">Project not found</h2>
-          <Link to="/dashboard/projects">Back to Projects</Link>
+          <h2 className="mb-2 font-semibold text-2xl">
+            {t("projectNotFound", { ns: "projects" })}
+          </h2>
+          <Link to="/dashboard/projects">{t("backToProjects", { ns: "projects" })}</Link>
         </div>
       </div>
     )
@@ -105,7 +109,7 @@ function WriteLayout() {
           <div className="flex h-16 items-center justify-between border-b bg-background/95 pr-6 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <WriteHeader
               breadcrumbs={[
-                { label: "Projects", to: "/dashboard/projects" },
+                { label: t("projects", { ns: "navigation" }), to: "/dashboard/projects" },
                 { label: project.title },
               ]}
             />
@@ -120,11 +124,11 @@ function WriteLayout() {
                   variant="outline"
                 >
                   <Sparkles className="h-4 w-4" />
-                  <span className="sr-only">Toggle AI Assistant</span>
+                  <span className="sr-only">{t("toggleAiAssistant", { ns: "editor" })}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>AI Assistant (⌘J)</p>
+                <p>{t("aiAssistantShortcut", { ns: "editor" })}</p>
               </TooltipContent>
             </Tooltip>
           </div>
