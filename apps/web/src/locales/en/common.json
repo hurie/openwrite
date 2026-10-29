@@ -18,7 +18,8 @@
     "new": "New",
     "skip": "Skip",
     "done": "Done",
-    "rename": "Rename"
+    "rename": "Rename",
+    "viewAll": "View All"
   },
   "status": {
     "saved": "Saved",
