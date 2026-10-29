@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { BookOpen, Plus } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { EditProjectDialog } from "@/components/edit-project-dialog"
 import { ProjectCard } from "@/components/project-card"
@@ -47,6 +48,7 @@ interface CreateProjectForm {
 }
 
 function ProjectsPage() {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -115,7 +117,7 @@ function ProjectsPage() {
         <div className="mx-auto max-w-7xl">
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
-              <div className="text-lg">Loading...</div>
+              <div className="text-lg">{t("actions.loading", { ns: "common" })}</div>
             </div>
           </div>
         </div>
@@ -132,7 +134,7 @@ function ProjectsPage() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage>Projects</BreadcrumbPage>
+                <BreadcrumbPage>{t("projects", { ns: "projects" })}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -140,15 +142,15 @@ function ProjectsPage() {
           {/* Title and Action */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="font-bold text-3xl">My Projects</h1>
-              <p className="mt-2">Manage your writing projects</p>
+              <h1 className="font-bold text-3xl">{t("myProjects", { ns: "projects" })}</h1>
+              <p className="mt-2">{t("projectDescription", { ns: "projects" })}</p>
             </div>
 
             <Dialog onOpenChange={setIsCreateDialogOpen} open={isCreateDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="flex items-center gap-2">
                   <Plus className="h-4 w-4" />
-                  New Project
+                  {t("newProject", { ns: "projects" })}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md">

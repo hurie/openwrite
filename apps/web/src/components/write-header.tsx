@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router"
+import LanguageSwitcher from "@/components/language-switcher"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -43,6 +44,7 @@ export default function WriteHeader({ breadcrumbs }: WriteHeaderProps) {
       </div>
 
       <div className="flex items-center gap-4">
+        <LanguageSwitcher />
         {/* UserMenu moved to sidebar footer for consistency */}
       </div>
     </header>

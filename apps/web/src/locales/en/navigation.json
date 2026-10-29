@@ -21,5 +21,14 @@
   "collapseSidebar": "Collapse sidebar",
   "expandSidebar": "Expand sidebar",
   "settings": "Settings",
-  "language": "Language"
+  "language": "Language",
+  "writing": "Writing",
+  "myProjects": "My Projects",
+  "organization": "Organization",
+  "team": "Team",
+  "aiTools": "AI & Tools",
+  "aiModels": "AI Models",
+  "notifications": "Notifications",
+  "noNotifications": "No notifications yet",
+  "searchPlaceholder": "Search projects, characters, locations..."
 }

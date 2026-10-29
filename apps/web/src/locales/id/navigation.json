@@ -3,7 +3,7 @@
   "structure": "Struktur",
   "manuscript": "Naskah",
   "storyMap": "Peta Cerita",
-  "canvas": "Kanvas",
+  "canvas": "Kanvas Alur",
   "codex": "Kodeks",
   "characters": "Karakter",
   "locations": "Lokasi",
@@ -21,5 +21,14 @@
   "collapseSidebar": "Ciutkan bilah sisi",
   "expandSidebar": "Perluas bilah sisi",
   "settings": "Pengaturan",
-  "language": "Bahasa"
+  "language": "Bahasa",
+  "writing": "Kepenulisan",
+  "myProjects": "Proyek Saya",
+  "organization": "Organisasi",
+  "team": "Tim",
+  "aiTools": "AI & Perangkat",
+  "aiModels": "Model AI",
+  "notifications": "Notifikasi",
+  "noNotifications": "Belum ada notifikasi",
+  "searchPlaceholder": "Cari proyek, karakter, lokasi..."
 }

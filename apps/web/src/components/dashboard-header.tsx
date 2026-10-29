@@ -1,4 +1,6 @@
 import { Bell, Search } from "lucide-react"
+import { useTranslation } from "react-i18next"
+import LanguageSwitcher from "@/components/language-switcher"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -11,6 +13,8 @@ import { Input } from "@/components/ui/input"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export default function DashboardHeader() {
+  const { t } = useTranslation()
+
   return (
     <header className="flex h-16 items-center justify-between border-b px-6">
       <div className="flex items-center gap-4">
@@ -19,7 +23,7 @@ export default function DashboardHeader() {
           <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             className="w-48 pl-10 sm:w-64 lg:w-96"
-            placeholder="Search projects, characters, locations..."
+            placeholder={t("searchPlaceholder", { ns: "navigation" })}
           />
         </div>
 
@@ -31,7 +35,9 @@ export default function DashboardHeader() {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
+        <LanguageSwitcher />
+
         {/* Notifications Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -40,10 +46,10 @@ export default function DashboardHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-64">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("notifications", { ns: "navigation" })}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <div className="p-4 text-center text-muted-foreground text-sm">
-              No notifications yet
+              {t("noNotifications", { ns: "navigation" })}
             </div>
           </DropdownMenuContent>
         </DropdownMenu>
