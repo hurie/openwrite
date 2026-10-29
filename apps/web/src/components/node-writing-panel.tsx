@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { Loader2, Sparkles, Trash2 } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -27,29 +28,48 @@ function TextBlockEditor({
   onChanged: () => void
   projectId: string
 }) {
+  const { t } = useTranslation()
   const [value, setValue] = useState(block.content ?? "")
 
   const updateMutation = useMutation({
     mutationFn: async (content: string) =>
       await api.graph.updateTextBlock(projectId, nodeId, block.id, { content }),
     onSuccess: onChanged,
-    onError: () => toast.error("Failed to save text block"),
+    onError: () =>
+      toast.error(
+        t("writingPanel.saveError", {
+          defaultValue: "Failed to save text block",
+          ns: "canvas",
+        })
+      ),
   })
 
   const deleteMutation = useMutation({
     mutationFn: async () => await api.graph.deleteTextBlock(projectId, nodeId, block.id),
     onSuccess: onChanged,
-    onError: () => toast.error("Failed to delete text block"),
+    onError: () =>
+      toast.error(
+        t("writingPanel.deleteError", {
+          defaultValue: "Failed to delete text block",
+          ns: "canvas",
+        })
+      ),
   })
 
   return (
     <div className="space-y-2 rounded-lg border bg-muted/10 p-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Badge variant="outline">Block {index + 1}</Badge>
-          <span className="text-muted-foreground text-xs">{block.wordCount || 0} words</span>
+          <Badge variant="outline">
+            {t("writingPanel.block", { index: index + 1, ns: "canvas" })}
+          </Badge>
+          <span className="text-muted-foreground text-xs">
+            {block.wordCount || 0} {t("writingPanel.words", { ns: "canvas" })}
+          </span>
           {updateMutation.isPending && (
-            <span className="text-muted-foreground text-xs">Saving…</span>
+            <span className="text-muted-foreground text-xs">
+              {t("writingPanel.saving", { ns: "canvas" })}
+            </span>
           )}
         </div>
         <Button
@@ -78,6 +98,7 @@ function TextBlockEditor({
 }
 
 export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [newBlockContent, setNewBlockContent] = useState("")
   const [instructions, setInstructions] = useState("")
@@ -104,7 +125,13 @@ export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
       setNewBlockContent("")
       refresh()
     },
-    onError: () => toast.error("Failed to add text block"),
+    onError: () =>
+      toast.error(
+        t("writingPanel.addError", {
+          defaultValue: "Failed to add text block",
+          ns: "canvas",
+        })
+      ),
   })
 
   const generateMutation = useMutation({
@@ -113,7 +140,14 @@ export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
         instructions: instructions.trim() || undefined,
       }),
     onSuccess: (result) => {
-      toast.success(`Draft generated (${result.wordCount} words, via ${result.provider})`)
+      toast.success(
+        t("writingPanel.generateSuccess", {
+          count: result.wordCount,
+          provider: result.provider,
+          defaultValue: `Draft generated (${result.wordCount} words, via ${result.provider})`,
+          ns: "canvas",
+        })
+      )
       setInstructions("")
       refresh()
     },
@@ -122,7 +156,14 @@ export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
         setNeedsProvider(true)
         return
       }
-      toast.error(error instanceof Error ? error.message : "Generation failed")
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : t("writingPanel.generateFailed", {
+              defaultValue: "Generation failed",
+              ns: "canvas",
+            })
+      )
     },
   })
 
@@ -132,17 +173,18 @@ export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
       <div className="space-y-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-primary" />
-          <span className="font-medium text-sm">Generate a draft</span>
+          <span className="font-medium text-sm">
+            {t("writingPanel.generateDraft", { ns: "canvas" })}
+          </span>
         </div>
         <p className="text-muted-foreground text-xs">
-          Uses this element's connected characters, settings, lore, plot threads, and preceding
-          story elements as context, plus any existing text below.
+          {t("writingPanel.generateDesc", { ns: "canvas" })}
         </p>
         {needsProvider ? (
           <div className="space-y-2 text-sm">
-            <p>No AI provider connected yet.</p>
+            <p>{t("writingPanel.noProvider", { ns: "canvas" })}</p>
             <Button asChild size="sm" variant="outline">
-              <Link to="/dashboard/ai">Set up AI provider</Link>
+              <Link to="/dashboard/ai">{t("writingPanel.setupProvider", { ns: "canvas" })}</Link>
             </Button>
           </div>
         ) : (
@@ -150,7 +192,7 @@ export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
             <Textarea
               className="min-h-[60px]"
               onChange={(e) => setInstructions(e.target.value)}
-              placeholder="Optional instructions, e.g. 'tense pacing, end on a reveal'"
+              placeholder={t("writingPanel.instructionsPlaceholder", { ns: "canvas" })}
               value={instructions}
             />
             <Button
@@ -162,11 +204,13 @@ export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
             >
               {generateMutation.isPending ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Writing draft…
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+                  {t("writingPanel.writingDraft", { ns: "canvas" })}
                 </>
               ) : (
                 <>
-                  <Sparkles className="mr-2 h-4 w-4" /> Generate draft
+                  <Sparkles className="mr-2 h-4 w-4" />{" "}
+                  {t("writingPanel.buttonGenerate", { ns: "canvas" })}
                 </>
               )}
             </Button>
@@ -175,10 +219,14 @@ export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
       </div>
 
       {/* Existing text blocks */}
-      {isLoading && <div className="py-4 text-center text-muted-foreground text-sm">Loading…</div>}
+      {isLoading && (
+        <div className="py-4 text-center text-muted-foreground text-sm">
+          {t("actions.loading", { ns: "common" })}
+        </div>
+      )}
       {!isLoading && textBlocks.length === 0 && (
         <div className="rounded-lg border-2 border-dashed py-6 text-center text-muted-foreground text-sm">
-          No writing yet. Generate a draft above or add a block below.
+          {t("writingPanel.noWritingYet", { ns: "canvas" })}
         </div>
       )}
       {textBlocks.map((block, index) => (
@@ -195,13 +243,13 @@ export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
       {/* Add new block */}
       <div className="space-y-2">
         <Label className="font-medium text-sm" htmlFor="new-text-block">
-          Add text block
+          {t("writingPanel.addTextBlock", { ns: "canvas" })}
         </Label>
         <Textarea
           className="min-h-[80px]"
           id="new-text-block"
           onChange={(e) => setNewBlockContent(e.target.value)}
-          placeholder="Write content for this story element..."
+          placeholder={t("writingPanel.writeContentPlaceholder", { ns: "canvas" })}
           value={newBlockContent}
         />
         <Button
@@ -212,7 +260,9 @@ export function NodeWritingPanel({ projectId, nodeId }: NodeWritingPanelProps) {
           type="button"
           variant="outline"
         >
-          {createMutation.isPending ? "Adding…" : "Add block"}
+          {createMutation.isPending
+            ? t("writingPanel.adding", { ns: "canvas" })
+            : t("writingPanel.addBlock", { ns: "canvas" })}
         </Button>
       </div>
     </div>
